@@ -12,10 +12,22 @@ function createScene() {
     const scene = new BABYLON.Scene(engine);
 
     // create a camera
-    const camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 0, 0), scene);
+    const camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 0, -10), scene);
 
     // create a light
     const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0,1,0), scene);
+
+    // create a box
+    const box = BABYLON.MeshBuilder.CreateBox('box', {}, scene);
+
+    // create a sphere
+    const sphere = BABYLON.MeshBuilder.CreateSphere('sphere', {}, scene);
+    sphere.position = new BABYLON.Vector3(2.5, 0, 0);
+
+    // create a plane
+    const plane = BABYLON.MeshBuilder.CreatePlane('plane', {}, scene);
+    plane.position = new BABYLON.Vector3(-2.5, 0, 0);
+
 
     return scene;
 }
@@ -23,6 +35,7 @@ function createScene() {
 // create our scene
 const scene = createScene();
 
+// running the render loop
 engine.runRenderLoop(() => {
     scene.render();
 })
