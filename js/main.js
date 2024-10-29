@@ -12,12 +12,17 @@ function createScene() {
     // create a scene
     const scene = new BABYLON.Scene(engine);
 
-    // create a camera
-    const camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 0, -25), scene);
+    // types of cameras
+    // const camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 0, -25), scene);
+    // const camera = new BABYLON.UniversalCamera('camera', new BABYLON.Vector3(0, 0, -25), scene);
+    const camera = new BABYLON.FollowCamera('camera', new BABYLON.Vector3(0, 0, -25), scene);
+    camera.radius = 2;
     camera.attachControl(canvas, true);
 
-    // create a light
-    const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0,1,0), scene);
+    // types of lights
+    // const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0,1,0), scene);
+    // const light = new BABYLON.PointLight('light', new BABYLON.Vector3(0,5,0), scene);
+    const light = new BABYLON.DirectionalLight('light', new BABYLON.Vector3(5,-1,4), scene);
 
     // create a box
     const box = new BABYLON.MeshBuilder.CreateBox('box', {
@@ -27,6 +32,7 @@ function createScene() {
         height: 1
     }, scene);
     box.rotation = new BABYLON.Vector3(2, 0.5, 0.5);
+    camera.lockedTarget = box;
 
      // create a sphere
      const sphere = BABYLON.MeshBuilder.CreateSphere('sphere', {}, scene);
@@ -49,6 +55,20 @@ function createScene() {
     ];
 
     const lines = BABYLON.MeshBuilder.CreateLines('lines', {points}, scene);
+
+    // create a material
+    const material = new BABYLON.StandardMaterial('material', scene);
+    material.diffuseColor = new BABYLON.Color3(0, 1, 1);
+
+    // material.emissiveColor = new BABYLON.Color3(0, 1, 0);
+
+    box.material = material;
+
+    // create a texture
+    const material2 = new BABYLON.StandardMaterial('material2', scene);
+    material2.diffuseTexture = new BABYLON.Texture('assets/images/dark_rock.png', scene);
+
+    sphere.material = material2;
 
     return scene;
 }
