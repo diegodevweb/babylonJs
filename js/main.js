@@ -19,10 +19,18 @@ function createCamera(scene) {
 
 function createLight(scene) {
     const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene);
+    light.intensity = 0.8;
+    light.groundColor = new BABYLON.Color3.Magenta();
 }
 
 function createSun(scene) {
     const sun = BABYLON.MeshBuilder.CreateSphere('sun', {segments: 16, diameter: 4}, scene);
+    const sunMaterial = new BABYLON.StandardMaterial('sunMaterial', scene);
+    sunMaterial.diffuseTexture = new BABYLON.Texture('/assets/images/sun.jpg', scene);
+    sunMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+    // objeto com luz própria
+    // sunMaterial.emissiveColor = new BABYLON.Color3.Yellow();
+    sun.material = sunMaterial;
 }
 
 function createPlanet(scene) {
@@ -39,6 +47,9 @@ function createPlanet(scene) {
 function createScene() {
     // create a scene
     const scene = new BABYLON.Scene(engine);
+
+    // deixando o background escuro 
+    scene.clearColor = new BABYLON.Color3.Black();
 
     createCamera();
 
