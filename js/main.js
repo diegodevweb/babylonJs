@@ -75,8 +75,9 @@ function createSkybox(scene) {
     skybox.material = skyboxMaterial;
 }
 
-// funcao para importar um modelo 3d
+// importar nave
 function createShip(scene) {    
+    //Scene loader é uma função que carrega um modelo 3d
     BABYLON.SceneLoader.ImportMesh('', '/assets/models/', 'spaceCraft1.obj', scene, (meshes) => {
         meshes.forEach((mesh) => {
             mesh.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
