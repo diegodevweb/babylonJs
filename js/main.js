@@ -8,93 +8,112 @@ const engine = new BABYLON.Engine(canvas, true);
 
 // camera
 function createCamera(scene) {
-    const camera = new BABYLON.ArcRotateCamera('camera', 0, 0,0, new BABYLON.Vector3.Zero(), scene);
+    const camera = new BABYLON.ArcRotateCamera('camera', Math.PI*3.5, Math.PI / 2.15,0, new BABYLON.Vector3.Zero(), scene);
     //let user move our camera
+
+    camera.panningSensibility = 15000;
     camera.attachControl(canvas);
 
     // limit camera movement
-    camera.lowerRadiusLimit = 6;
-    camera.upperRadiusLimit = 20;
+    camera.lowerRadiusLimit = 8;
+    camera.upperRadiusLimit = 12;
+    
 }
 
 function createLight(scene) {
     const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene);
-    light.intensity = 0.3;
-    // light.groundColor = new BABYLON.Color3.Magenta();
+    light.intensity = 1.2;
+    light.groundColor = new BABYLON.Color3.Gray();
 }
 
-function createSun(scene) {
-    const sun = BABYLON.MeshBuilder.CreateSphere('sun', {segments: 16, diameter: 4}, scene);
-    const sunMaterial = new BABYLON.StandardMaterial('sunMaterial', scene);
-    sunMaterial.emissiveTexture = new BABYLON.Texture('/assets/images/sun.jpg', scene);
-    // ajuste para o sol nao ficar com reflexo
-    sunMaterial.specularColor = new BABYLON.Color3.Black();
-    sunMaterial.diffuseColor = new BABYLON.Color3.Black();
-    // sunMaterial.diffuseTexture = new BABYLON.Texture('/assets/images/sun.jpg', scene);
-    // sunMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-    // objeto com luz própria
-    // sunMaterial.emissiveColor = new BABYLON.Color3.Yellow();
-    sun.material = sunMaterial;
+function createRoom(scene) {
+    // Material para as paredes
+    const wallMaterial = new BABYLON.StandardMaterial("wallMaterial", scene);
+    const wallMaterial2 = new BABYLON.StandardMaterial("wallMaterial2", scene);
+    const wallTexture = new BABYLON.Texture("/assets/images/toque-fino.png", scene);
+    const wallTexture2 = new BABYLON.Texture("/assets/images/cinza-claro.png", scene);
+    // escala da textura
+    wallTexture.uScale = 1.5;
+    wallTexture.vScale = 1.5;
+    wallMaterial.diffuseTexture = wallTexture;
 
-    // create sun light
-    const sunLight = new BABYLON.PointLight('sunLight', new BABYLON.Vector3(0, 0, 0), scene);
-    sunLight.intensity = 2;
+    wallTexture2.uScale = 1.5;
+    wallTexture2.vScale = 1.5;
+    wallMaterial2.diffuseTexture = wallTexture2;
+
+    
+    // Material para o chão
+    const floorMaterial = new BABYLON.StandardMaterial("floorMaterial", scene);
+    floorMaterial.diffuseTexture = wallTexture2;
+
+    // Dimensões da sala
+    const roomWidth = 12.2;
+    const roomHeight = 8.5;
+    const roomDepth = 12.2;
+
+    wallMaterial.backFaceCulling = true;
+    floorMaterial.backFaceCulling = false;
+    
+
+    // Chão
+    const floor = BABYLON.MeshBuilder.CreatePlane("floor", { width: roomWidth, height: roomDepth }, scene);
+    floor.rotation.x = Math.PI / 2; // Deitar o plano
+    floor.position.y = -3.2; // Altura do chão
+    floor.material = floorMaterial;
+
+    // Parede de trás
+    const backWall = BABYLON.MeshBuilder.CreatePlane("backWall", { width: roomWidth, height: roomHeight }, scene);
+    backWall.position.z = roomDepth / 2; // Ajustar posição
+    backWall.position.y = roomHeight / 8.4; // Altura centralizada
+    backWall.material = wallMaterial2;
+
+    // Parede da frente
+    const frontWall = BABYLON.MeshBuilder.CreatePlane("frontWall", { width: roomWidth, height: roomHeight }, scene);
+    frontWall.position.z = roomDepth / 2; // Ajustar posição
+    frontWall.position.y = roomHeight / 8.4; // Altura centralizada
+    frontWall.rotation = Math.PI; // Inverter para ficar visível
+    frontWall.material = wallMaterial2;
+
+    // Parede esquerda
+    const leftWall = BABYLON.MeshBuilder.CreatePlane("leftWall", { width: roomDepth, height: roomHeight }, scene);
+    leftWall.position.x = -roomWidth / 2; // Ajustar posição
+    leftWall.position.y = roomHeight / 8.4; // Altura centralizada
+    leftWall.rotation.y = -Math.PI / 2; // Rotação para alinhar
+    leftWall.material = wallMaterial2;
+
+    // Parede direita
+    const rightWall = BABYLON.MeshBuilder.CreatePlane("rightWall", { width: roomDepth, height: roomHeight }, scene);
+    rightWall.position.x = roomWidth / 2; // Ajustar posição
+    rightWall.position.y = roomHeight / 8.4; // Altura centralizada
+    rightWall.rotation.y = Math.PI / 2; // Rotação para alinhar
+    rightWall.material = wallMaterial2;
+
+    // Teto
+    const ceiling = BABYLON.MeshBuilder.CreatePlane("ceiling", { width: roomWidth, height: roomDepth }, scene);
+    ceiling.rotation.x = -Math.PI / 2; // Deitar o plano invertido
+    ceiling.position.y = roomHeight - 3.25; // Altura do teto
+    ceiling.material = wallMaterial; // Use uma textura diferente se quiser
 }
 
-function createPlanet(scene) {
-    const planetMaterial = new BABYLON.StandardMaterial('planetMaterial', scene);
-    planetMaterial.diffuseTexture = new BABYLON.Texture('/assets/images/sand.png', scene);
-    // tira o reflexo do planeta
-    planetMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-
-    const planet = BABYLON.MeshBuilder.CreateSphere('planet', {segments: 16, diameter: 1}, scene);
-    planet.material = planetMaterial;
-    planet.position.x = 0;
-    planet.position.z = -8.5;
-    planet.position.y = 0;
-}
-
-function createSkybox(scene) {
-    const skybox = BABYLON.MeshBuilder.CreateBox('skybox', {size: 1000}, scene);
-    const skyboxMaterial = new BABYLON.StandardMaterial('skyboxMaterial', scene);
-
-    // removendo reflexo do skybox
-    skyboxMaterial.specularColor = new BABYLON.Color3.Black();
-    skyboxMaterial.diffuseColor = new BABYLON.Color3.Black();
-
-    // textura do skybox
-    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture('/assets/images/skybox/skybox', scene);
-    skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-
-    // deixando o box visivel
-    skyboxMaterial.backFaceCulling = false;
-
-    // movendo skybox com camera
-    skybox.infiniteDistance = true;
-
-    skybox.material = skyboxMaterial;
-}
-
-// importar nave
-function createShip(scene) {    
-    //Scene loader é uma função que carrega um modelo 3d
-    BABYLON.SceneLoader.ImportMesh('', '/assets/models/', 'spaceCraft1.obj', scene, (meshes) => {
-        meshes.forEach((mesh) => {
-            mesh.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
-            mesh.position = new BABYLON.Vector3(0, -5, 10);
-        });
-    });
-}
 
 function createFurniture(scene) {
-    BABYLON.SceneLoader.ImportMesh('', '/assets/models/', 'armario.obj', scene, (meshes) => {
+    BABYLON.SceneLoader.ImportMesh('', '/assets/models/', 'armarioCozinha.glb', scene, (meshes) => {
         meshes.forEach((mesh) => {
-            console.log('ola');
-            // mesh.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
-            mesh.position = new BABYLON.Vector3(0, -3, -12);
+            mesh.scaling = new BABYLON.Vector3(2.3, 2.3, 2.3);
+            const armarioProfundidade = 2;  // Profundidade do armário, ajuste conforme o tamanho real do modelo
+            mesh.position = new BABYLON.Vector3(5.5, 0.15, 3.25);  // Posição ajustada para a parede de fundo
         });
     });
 }
+
+function addFurnitureOnClick() {
+    const addButton = document.getElementById('addFurnitureButton');
+    addButton.addEventListener('click', () => {
+        // Create a new scene or add furniture to the existing scene
+        createFurniture(mainScene);
+    });
+}
+
 
 function createScene() {
     // create a scene
@@ -107,21 +126,18 @@ function createScene() {
 
     createLight(scene);
 
-    createSun(scene);
+    createRoom(scene);
 
-    createPlanet(scene);
-
-    createSkybox(scene);
-
-    createShip(scene);
-
-    createFurniture(scene);
+    // createFurniture(scene);
 
     return scene;
 }
 
 // create a instance of scene
 const mainScene = createScene();
+
+addFurnitureOnClick();
+
 
 engine.runRenderLoop(() => {
     mainScene.render();
