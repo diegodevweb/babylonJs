@@ -7,24 +7,60 @@
     <link href="./dist/output.css" rel="stylesheet">
 </head>
 <body class="m-0 flex h-screen w-screen">
-    <!-- Sidebar -->
-     
-    <div id="sidebar" class="w-[200px] bg-gray-800 text-white flex flex-col items-center p-2 shadow-lg z-10">
-        <details class="dropdown">
-            <summary class="btn m-1">Escolha o ambiente</summary>
-            <ul class="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 my-2 shadow ">
-                <li><a>Cozinha</a></li>
-                <li><a>Dormitório</a></li>
-            </ul>
-            </details>
-        <button id="addFurnitureButton" class="btn w-32 rounded-fullbg-base-100 rounded-box z-[1] p-2 my-2 shadow">
-            Adicionar Armário
-        </button>
-        <button class="btn w-52 bg-base-100 rounded-box z-[1] p-2 my-2 shadow">Button</button>
-        
+    <div id="sidebar" class="w-[250px] bg-gray-800 text-white flex flex-col items-center p-2 shadow-lg z-10">
+        <ul class="menu bg-base-200 rounded-box w-56">
+            <li>
+              <details closed>
+                <summary>Cozinha</summary>
+                <ul>
+                    <details closed>
+                        <summary>Superiores</summary>
+                            <ul>
+                                <li><a id="addFurnitureButton">Basculante</a></li>
+                                <li><a>Gabinete</a></li>
+                            </ul>
+                        </details>
+                    <details closed>
+                        <summary>Inferiores</summary>
+                            <ul>
+                                <li><a>Armário</a></li>
+                                <li><a>Gaveteiro</a></li>
+                            </ul>
+                    </details>
+                  </li>
+                </ul>
+              </details>
+            </li>
+        </ul>
+        <ul class="menu bg-base-200 rounded-box w-56">
+            <li>
+              <details closed>
+                <summary>Quarto</summary>
+                <ul>
+                    <details closed>
+                        <summary>Armários</summary>
+                            <ul>
+                                <li><a id="addBedroomFurnitureButton">Guarda-roupas</a></li>
+                                <li><a>Superiores</a></li>
+                            </ul>
+                        </details>
+                    <details closed>
+                        <summary>Inferiores</summary>
+                            <ul>
+                                <li><a>Mesa lateral</a></li>
+                                <li><a>Cabeceira</a></li>
+                            </ul>
+                    </details>
+                  </li>
+                </ul>
+              </details>
+            </li>
+        </ul>
+        </div>
     </div>
+    
     <!-- Canvas -->
-    <canvas id="renderCanvas" class="flex-grow"></canvas>
+    <canvas id="renderCanvas" class="flex-grow relative"></canvas>
     <script src="js/vendor/babylon.js"></script>
     <script src="js/vendor/babylonjs.loaders.min.js"></script>
     <script src="js/main.js" type="module"></script>

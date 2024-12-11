@@ -16,7 +16,7 @@ function createCamera(scene) {
 
     // limit camera movement
     camera.lowerRadiusLimit = 8;
-    camera.upperRadiusLimit = 12;
+    camera.upperRadiusLimit = 40;
     
 }
 
@@ -96,7 +96,7 @@ function createRoom(scene) {
 }
 
 
-function createFurniture(scene) {
+function createKitchenFurniture(scene) {
     BABYLON.SceneLoader.ImportMesh('', '/assets/models/', 'armarioCozinha.glb', scene, (meshes) => {
         meshes.forEach((mesh) => {
             mesh.scaling = new BABYLON.Vector3(2.3, 2.3, 2.3);
@@ -110,9 +110,27 @@ function addFurnitureOnClick() {
     const addButton = document.getElementById('addFurnitureButton');
     addButton.addEventListener('click', () => {
         // Create a new scene or add furniture to the existing scene
-        createFurniture(mainScene);
+        createKitchenFurniture(mainScene);
     });
 }
+
+function createBedroomFurniture(scene) {
+    BABYLON.SceneLoader.ImportMesh('', '/assets/models/', 'armarioQuarto.glb', scene, (meshes) => {
+        meshes.forEach((mesh) => {
+            mesh.scaling = new BABYLON.Vector3(1.2, 1.8, 2.5);
+            const armarioQuartoProfundidade = 2.5;  // Profundidade do armário, ajuste conforme o tamanho real do modelo
+            mesh.position = new BABYLON.Vector3(2.5, -1.2, 3.25);
+        });
+    });
+}
+
+function addBedroomFurnitureOnClick() {
+    const addButton = document.getElementById('addBedroomFurnitureButton');
+    addButton.addEventListener('click', () => {
+        // Create a new scene or add furniture to the existing scene
+        createBedroomFurniture(mainScene);
+    });
+}  
 
 
 function createScene() {
@@ -138,6 +156,7 @@ const mainScene = createScene();
 
 addFurnitureOnClick();
 
+addBedroomFurnitureOnClick();
 
 engine.runRenderLoop(() => {
     mainScene.render();
